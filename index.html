@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ToDoAPP</title>
+</head>
+<body> <div class="container">
+    <h1>Todo List</h1>
+    <input type="text" id="todoInput" placeholder="Enter a new task">
+    <button onclick="addTodo()">Add</button>
+    <ul id="todoList">
+        <!-- Todo items will be added here dynamically -->
+    </ul>
+</div>
+
+<script>
+    function addTodo() {
+        var input = document.getElementById("todoInput");
+        var text = input.value.trim();
+        if (text !== "") {
+            var list = document.getElementById("todoList");
+            var newItem = document.createElement("li");
+            newItem.textContent = text;
+            list.appendChild(newItem);
+            input.value = "";
+        }
+    }
+</script>
+    
+</body>
+</html>

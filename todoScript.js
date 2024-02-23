@@ -11,6 +11,11 @@ function addTodo() {
     var todoList = document.getElementById("todoList");
     var li = document.createElement("li");
     
+    // Create checkbox for todo
+    var checkbox = document.createElement("input");
+    checkbox.type = "checkbox";
+    li.appendChild(checkbox);
+    
     // Create text node for todo
     var todoText = document.createTextNode(todoInput);
     li.appendChild(todoText);
@@ -37,7 +42,7 @@ function addTodo() {
     todoList.appendChild(li);
     document.getElementById("todoInput").value = "";
 
-    // Speichert todo in localStorage
+    // Save todos to localStorage
     saveTodos();
   } else {
     alert("Bitte geben Sie einen To-Do-Text ein.");
@@ -52,8 +57,8 @@ function saveEditTodo() {
     if (selectedTodo) {
       selectedTodo.firstChild.textContent = todoInput; // Update the text of the todo
       selectedTodo.classList.remove("selected");
-      saveTodos(); // Speichert  lokal die änderungen, nach dem Edit
-      location.reload(); // Ladet die Seite neu , nach editieren
+      saveTodos(); // Save todos to localStorage after editing
+      location.reload(); // Reload the page after editing
     } else {
       alert("Es wurde kein To-Do zum Bearbeiten ausgewählt.");
     }
@@ -67,8 +72,11 @@ function saveTodos() {
   var todoList = document.getElementById("todoList");
   var todos = [];
   for (var i = 0; i < todoList.children.length; i++) {
-    var todoText = todoList.children[i].firstChild.textContent;
-    todos.push(todoText);
+    var todo = {
+      text: todoList.children[i].childNodes[1].textContent,
+      completed: todoList.children[i].childNodes[0].checked
+    };
+    todos.push(todo);
   }
   localStorage.setItem("todos", JSON.stringify(todos));
 }
@@ -78,10 +86,15 @@ function loadTodos() {
   if (storedTodos) {
     var todos = JSON.parse(storedTodos);
     var todoList = document.getElementById("todoList");
-    todos.forEach(function(todoText) {
+    todos.forEach(function(todo) {
       var li = document.createElement("li");
       
-      var todoTextNode = document.createTextNode(todoText);
+      var checkbox = document.createElement("input");
+      checkbox.type = "checkbox";
+      checkbox.checked = todo.completed;
+      li.appendChild(checkbox);
+      
+      var todoTextNode = document.createTextNode(todo.text);
       li.appendChild(todoTextNode);
       
       var deleteButton = document.createElement("button");
